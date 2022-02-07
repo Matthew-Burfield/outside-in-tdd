@@ -8,12 +8,12 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Install Dependencies
-        run: yarn install --frozen-lockfile
+        run: npm ci
       - name: Unit Tests
-        run: yarn test --watchAll=false
+        run: npm run test -- --watchAll=false
       - name: E2E Tests
         uses: cypress-io/github-action@v2
         with:
-          start: yarn start
+          start: npm run start
           wait-on: 'http://localhost:3000'
 
