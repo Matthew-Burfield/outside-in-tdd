@@ -1,3 +1,4 @@
+import { List, ListItem, ListItemText } from '@material-ui/core';
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { RootState } from '../store/reducers';
@@ -19,11 +20,13 @@ function RestaurantList(props: Props) {
   }, [props.loadRestaurants]);
 
   return (
-    <ul>
+    <List>
       {props.restaurants.map((restaurant) => (
-        <li key={restaurant.id}>{restaurant.name}</li>
+        <ListItem key={restaurant.id}>
+          <ListItemText>{restaurant.name}</ListItemText>
+        </ListItem>
       ))}
-    </ul>
+    </List>
   );
 }
 
