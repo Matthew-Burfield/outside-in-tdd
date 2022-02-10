@@ -1,6 +1,13 @@
+import axios from 'axios';
+
+const client = axios.create({
+  baseURL: `https://outside-in-dev-api.herokuapp.com/${process.env.REACT_APP_API_TOKEN}`
+});
+
 const api = {
-  loadRestaurants() {
-    return [];
+  async loadRestaurants() {
+    const response = await client.get('/restaurants');
+    return response.data;
   }
 };
 
