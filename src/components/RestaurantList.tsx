@@ -1,8 +1,9 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
+import { RootState } from '../store/reducers';
 import { loadRestaurants } from '../store/restaurants/actions';
 
-type tRestaurant = {
+export type tRestaurant = {
   id: number;
   name: string;
 };
@@ -26,7 +27,7 @@ function RestaurantList(props: Props) {
   );
 }
 
-const mapStateToProps = (state: any) => ({
+const mapStateToProps = (state: RootState) => ({
   restaurants: state.restaurants.records
 });
 
