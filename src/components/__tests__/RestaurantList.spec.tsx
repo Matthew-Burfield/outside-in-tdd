@@ -1,6 +1,7 @@
 import { render } from '@testing-library/react';
 import { RestaurantList } from '../RestaurantList';
 import type { RenderResult } from '@testing-library/react';
+import { deserialize } from 'v8';
 
 describe('RestaurantList', () => {
   const restaurants = [
@@ -14,6 +15,7 @@ describe('RestaurantList', () => {
     const props = {
       loadRestaurants: jest.fn().mockName('loadRestaurants'),
       loading: false,
+      isLoadError: false,
       restaurants,
       ...propOverrides
     };
@@ -46,6 +48,22 @@ describe('RestaurantList', () => {
     it('should not display the loading indicator while not loading', () => {
       const { queryByTestId } = context;
       expect(queryByTestId('loading-indicator')).toBeNull();
+    });
+
+    it('should not display the error message', () => {
+      const { queryByText } = context;
+      expect(queryByText('Restaurants could not be loaded')).toBeNull();
+    });
+  });
+
+  describe('when loading fails', () => {
+    beforeEach(() => {
+      renderWithProps({ isLoadError: true });
+    });
+
+    it('should display the error message', () => {
+      const { queryByText } = context;
+      expect(queryByText('Restaurants could not be loaded')).not.toBeNull();
     });
   });
 });
