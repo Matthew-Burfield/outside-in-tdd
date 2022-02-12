@@ -1,4 +1,9 @@
-import { List, ListItem, ListItemText } from '@material-ui/core';
+import {
+  CircularProgress,
+  List,
+  ListItem,
+  ListItemText
+} from '@material-ui/core';
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { RootState } from '../store/reducers';
@@ -11,6 +16,7 @@ export type tRestaurant = {
 
 interface Props {
   loadRestaurants: () => void;
+  loading: boolean;
   restaurants: tRestaurant[];
 }
 
@@ -20,18 +26,22 @@ function RestaurantList(props: Props) {
   }, [props.loadRestaurants]);
 
   return (
-    <List>
-      {props.restaurants.map((restaurant) => (
-        <ListItem key={restaurant.id}>
-          <ListItemText>{restaurant.name}</ListItemText>
-        </ListItem>
-      ))}
-    </List>
+    <>
+      {props.loading && <CircularProgress data-testid="loading-indicator" />}
+      <List>
+        {props.restaurants.map((restaurant) => (
+          <ListItem key={restaurant.id}>
+            <ListItemText>{restaurant.name}</ListItemText>
+          </ListItem>
+        ))}
+      </List>
+    </>
   );
 }
 
 const mapStateToProps = (state: RootState) => ({
-  restaurants: state.restaurants.records
+  restaurants: state.restaurants.records,
+  loading: state.restaurants.loading
 });
 
 const mapDispatchToProps = { loadRestaurants };

@@ -4,6 +4,7 @@ import { tRestaurant } from '../../components/RestaurantList';
 import { RootState } from '../reducers';
 
 export const STORE_RESTAURANTS = 'STORE_RESTAURANTS';
+export const START_LOADING_RESTAURANTS = 'START_LOADING_RESTAURANTS';
 
 export function loadRestaurants() {
   return async function (
@@ -11,6 +12,7 @@ export function loadRestaurants() {
     getState: () => RootState,
     api: Api
   ) {
+    dispatch(startLoadingRestaurants());
     const records = await api.loadRestaurants();
     dispatch(storeRestaurants(records));
   };
@@ -20,5 +22,11 @@ function storeRestaurants(records: tRestaurant[]) {
   return {
     type: STORE_RESTAURANTS,
     records
+  };
+}
+
+function startLoadingRestaurants() {
+  return {
+    type: START_LOADING_RESTAURANTS
   };
 }

@@ -10,24 +10,42 @@ describe('RestaurantList', () => {
   let loadRestaurants: jest.Mock;
   let context: RenderResult;
 
-  beforeEach(() => {
-    loadRestaurants = jest.fn().mockName('loadRestaurants');
-    context = render(
-      <RestaurantList
-        loadRestaurants={loadRestaurants}
-        restaurants={restaurants}
-      />
-    );
-  });
+  function renderWithProps(propOverrides = {}) {
+    const props = {
+      loadRestaurants: jest.fn().mockName('loadRestaurants'),
+      loading: false,
+      restaurants,
+      ...propOverrides
+    };
+    loadRestaurants = props.loadRestaurants;
+    context = render(<RestaurantList {...props} />);
+  }
 
   it('loads restaurants on the first render', () => {
+    renderWithProps();
     expect(loadRestaurants).toHaveBeenCalled();
   });
 
-  it('should display the restaurants', () => {
-    const { queryByText } = context;
+  it('should display the loading indicator while loading', () => {
+    renderWithProps({ loading: true });
+    const { queryByTestId } = context;
+    expect(queryByTestId('loading-indicator')).not.toBeNull();
+  });
 
-    expect(queryByText('Sushi Place')).not.toBeNull();
-    expect(queryByText('Pizza Place')).not.toBeNull();
+  describe('when loading succeeds', () => {
+    beforeEach(() => {
+      renderWithProps();
+    });
+    it('should display the restaurants', () => {
+      const { queryByText } = context;
+
+      expect(queryByText('Sushi Place')).not.toBeNull();
+      expect(queryByText('Pizza Place')).not.toBeNull();
+    });
+
+    it('should not display the loading indicator while not loading', () => {
+      const { queryByTestId } = context;
+      expect(queryByTestId('loading-indicator')).toBeNull();
+    });
   });
 });
