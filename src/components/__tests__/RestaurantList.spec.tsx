@@ -1,7 +1,6 @@
 import { render } from '@testing-library/react';
 import { RestaurantList } from '../RestaurantList';
 import type { RenderResult } from '@testing-library/react';
-import { deserialize } from 'v8';
 
 describe('RestaurantList', () => {
   const restaurants = [
