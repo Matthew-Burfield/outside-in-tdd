@@ -2,6 +2,7 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { Button, TextField } from '@material-ui/core';
 import { createRestaurant } from '../store/restaurants/actions';
+import { Alert } from '@material-ui/lab';
 
 interface Props {
   createRestaurant: (name: string) => Promise<void>;
@@ -9,18 +10,32 @@ interface Props {
 
 export function NewRestaurantForm(props: Props) {
   const [name, setName] = React.useState('');
+  const [isValidationError, setValidationError] = React.useState(false);
+  const [isServerError, setServerError] = React.useState(false);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    try {
-      await props.createRestaurant(name);
-      setName('');
-    } catch (e) {
-      console.log('Error: ', e);
+    setServerError(false);
+    if (name) {
+      setValidationError(false);
+      try {
+        await props.createRestaurant(name);
+        setName('');
+      } catch (e) {
+        setServerError(true);
+      }
+    } else {
+      setValidationError(true);
     }
   };
   return (
     <form onSubmit={handleSubmit}>
+      {isValidationError && <Alert severity="error">Name is required</Alert>}
+      {isServerError && (
+        <Alert severity="error">
+          The restaurant could not be saved. Please try again.
+        </Alert>
+      )}
       <TextField
         placeholder="Add Restaurant"
         fullWidth
