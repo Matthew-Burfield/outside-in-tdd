@@ -2,7 +2,8 @@ import { combineReducers } from 'redux';
 import {
   IS_LOADING_RESTAURANTS,
   STORE_RESTAURANTS,
-  IS_RESTAURANTS_LOADING_ERROR
+  IS_RESTAURANTS_LOADING_ERROR,
+  ADD_RESTAURANT
 } from './actions';
 import type { AnyAction } from 'redux';
 import { tRestaurant } from '../../components/RestaurantList';
@@ -11,6 +12,8 @@ function records(state: tRestaurant[] = [], action: AnyAction): tRestaurant[] {
   switch (action.type) {
     case STORE_RESTAURANTS:
       return action.records;
+    case ADD_RESTAURANT:
+      return [...state, action.payload];
     default:
       return state;
   }
